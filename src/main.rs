@@ -1,33 +1,20 @@
-use std::{env, fs};
+use std::{env, process};
+use mini_grep::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let config = Config::new(&args);
-
-    run(config)
-}
-
-fn run(config: Config) {
-    let contents = fs::read_to_string(config.filename).expect("Couldn't read the file");
-
-    println!("Text of file: {}", contents)
-}
-
-struct Config {
-    query: String,
-    filename: String,
-}
-
-impl Config {
-    fn new(args: &[String]) -> Config {
-        if args.len() < 3 {
-            panic!("not enough arguments");
+    let config = match Config::new(&args) {
+        Err(err) => {
+            println!("Application error: {}", err);
+            process::exit(1);
         }
+        Ok(config) => config,
+    };
 
-        let query = args[1].clone();
-        let filename = args[2].clone();
+    if let Err(err) = mini_grep::run(config) {
+        println!("Application error: {}", err);
 
-        Config { query, filename }
+        process::exit(1);
     }
 }
