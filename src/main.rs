@@ -2,9 +2,9 @@ use std::{env, process};
 use mini_grep::Config;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    let args = env::args();
 
-    let config = match Config::new(&args) {
+    let config = match Config::new(args) {
         Err(err) => {
             eprintln!("Application error: {}", err);
             process::exit(1);
