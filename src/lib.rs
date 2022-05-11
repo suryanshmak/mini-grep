@@ -25,7 +25,7 @@ pub struct Config {
 impl Config {
     pub fn new(mut args: env::Args) -> Result<Config, &'static str> {
         args.next();
-
+        
         let query = match args.next() {
             Some(val) => val,
             None => return Err("Expected a search query"),
